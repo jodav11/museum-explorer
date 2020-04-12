@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html> 
+
+<head>
+    <title>Museum Explorer</title>
+    <h1>Museum Explorer</h1>
+    <h3>Follow the links to explore a museum of your choice without leaving the house.</h3>
+    <p class="credit">Made by Jodav11 for fun during quarentine</p>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 25%;
+        bottom: 0;
+        width: 100%;
+        height: 60%;
+        display: inline-block;
+      }
+    </style>
+</head>
+
+<body>
+    <style>
+    .mapboxgl-popup {
+    max-width: 400px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+    </style>
+    <div id="map"></div>
+    <script>
+
+mapboxgl.accessToken = 'pk.eyJ1Ijoiam9uYWhnMTEiLCJhIjoiY2sxcjJ3OTBiMDB4cTNnbG1kMTJ3YnlpNCJ9.VY2NN6YBw43tqHW1nx3PBg';
+var map = new mapboxgl.Map({
+style: 'mapbox://styles/mapbox/dark-v10',
+center: [-50.2284, 35.9098],
+zoom: 1.5,
+pitch: 45,
+//bearing: -17.6,
+container: 'map',
+antialias: true
+});
+ 
+// The 'building' layer in the mapbox-streets vector source contains building-height
+// data from OpenStreetMap.
+map.on('load', function() {
+// Insert the layer beneath any symbol layer.
+var layers = map.getStyle().layers;
+ 
+var labelLayerId;
+for (var i = 0; i < layers.length; i++) {
+if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+labelLayerId = layers[i].id;
+break;
+}
+}
+ 
+map.addLayer(
+{
+'id': '3d-buildings',
+'source': 'composite',
+'source-layer': 'building',
+'filter': ['==', 'extrude', 'true'],
+'type': 'fill-extrusion',
+'minzoom': 15,
+'paint': {
+'fill-extrusion-color': '#aaa',
+ 
+// use an 'interpolate' expression to add a smooth transition effect to the
+// buildings as the user zooms in
+'fill-extrusion-height': [
+'interpolate',
+['linear'],
+['zoom'],
+15,
+0,
+15.05,
+['get', 'height']
+],
+'fill-extrusion-base': [
+'interpolate',
+['linear'],
+['zoom'],
+15,
+0,
+15.05,
+['get', 'min_height']
+],
+'fill-extrusion-opacity': 0.6
+}
+},
+labelLayerId
+);
+});
+
+    map.on('load', function() {
+    map.addSource('places', {
+    'type': 'geojson',
+    'data': {
+    'type': 'FeatureCollection',
+    'features': [
+    {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>Smithsonian Museums in Washington D.C. </strong><br><img class="reframe" src="https://www.si.edu/sites/default/files/styles/press_photo/public/newsdesk/photos/castle-and-nmnh-large.jpg?itok=ETUaYa-7" /><p>Zoom in to take a closer look at the different mueseums</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [-77.0214, 38.8860]
+    }
+    },
+    {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>Smithsonian National Air and Space Museum</strong><p><a href="https://artsandculture.google.com/streetview/national-air-and-space-museum-washington-dc-second-floor/mAGIjNwvdyVBNA" target="_blank" title="Opens in a new window">The National Air and Space Museum of the Smithsonian Institution</a>, also called the Air and Space Museum, is a museum in Washington, D.C. It was established in 1946 as the National Air Museum and opened its main building on the National Mall near LEnfant Plaza in 1976</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [-77.0199, 38.8882] 
+    }},
+      {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>Smithsonian National Museum of Natural History</strong><p><a href="https://naturalhistory2.si.edu/vt3/NMNH/z_tour-022.html" target="_blank" title="Opens in a new window">Smithsonian National Museum of Natural History</a> is a natural history museum administered by the Smithsonian Institution, located on the National Mall in Washington, D.C., United States. It has free admission and is open 364 days a year.</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [-77.0261, 38.8913]
+    }
+    },
+     {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>Museum Of Contemporary Art Chicago</strong><br><img class="reframe" src="https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-9/s960x960/89430816_10157336761582762_7455530211824631808_o.jpg?_nc_cat=110&_nc_sid=8024bb&_nc_ohc=eBSqzQxPjUcAX8LvGao&_nc_ht=scontent-lga3-1.xx&_nc_tp=7&oh=c021de6dbcecd21c2b53088539c01ae6&oe=5EB78959" /><p><a href="https://mcachicago.org/Calendar" target="_blank" title="Opens in a new window">Museum Of Contemporary Art Chicago</a> is a contemporary art museum near Water Tower Place in downtown Chicago in Cook County, Illinois, United States. The museum, which was established in 1967, is one of the worlds largest contemporary art venues</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [-87.6213, 41.8972]
+    }
+    }, 
+    {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>The Museum of Modern Art (MOMA)</strong><br><img class="reframe" src="data:image/jpeg;base64,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" /><p><a href="https://artsandculture.google.com/partner/moma-the-museum-of-modern-art" target="_blank" title="Opens in a new window">The Museum of Modern Art</a> is an art museum located in Midtown Manhattan, New York City, on 53rd Street between Fifth and Sixth Avenues. It plays a major role in developing and collecting modern art, and is often identified as one of the largest and most influential museums of modern art in the world.</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [-73.9776, 40.7614]
+    }
+    },
+    {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>Louvre Museum</strong><br><img class="reframe" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Louvre_Museum_Wikimedia_Commons.jpg/240px-Louvre_Museum_Wikimedia_Commons.jpg" /><p><a href="https://petitegalerie.louvre.fr/visite-virtuelle/saison5/" target="_blank" title="Opens in a new window">Louvre Museum</a> is the worlds largest art museum and a historic monument in Paris, France. A central landmark of the city, it is located on the Right Bank of the Seine in the citys 1st arrondissement.</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [2.3376, 48.8606]
+    }
+    },
+    {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>National Bank of Belgium Museum</strong><br><img class="reframe" src="https://brusselsmuseums.imgix.net/covers/NBB-017.jpg?w=730&h=496&fit=crop&q=40&auto=format%2Cenhance%2Ccompress" /><p><a href="https://www.nbbmuseum.be/en/practical-information/virtual-visit" target="_blank" title="Opens in a new window">National Bank of Belgium Museum</a> has been the central bank of Belgium since 1850. The National Bank of Belgium was established with 100% private capital by a law of 5 May 1850 as a Société Anonyme. It is a member of the European System of Central Banks.</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [4.3584235, 50.8492094]
+    }
+    },
+
+    {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>The Israel Museum</strong><br><img class="reframe" src="https://media-cdn.tripadvisor.com/media/photo-s/0a/2a/05/10/israel-museum.jpg" /><p><a href="https://artsandculture.google.com/exhibit/questions-of-identity/BQLi-9RCgNvsIQ" target="_blank" title="Opens in a new window">The Israel Museum</a> was established in 1965 as Israels foremost cultural institution and one of the world’s leading encyclopaedic museums.</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [35.2041, 31.7722]
+    }
+    },
+
+        {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>Museum of Fine Arts</strong><br><img class="reframe" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Museum_of_Fine_Arts%2C_Budapest%2C_inner_detail.jpg/800px-Museum_of_Fine_Arts%2C_Budapest%2C_inner_detail.jpg" /><p><a href="https://artsandculture.google.com/partner/hungarian-national-gallery" target="_blank" title="Opens in a new window">Museum of Fine Arts</a> is a museum in Heroes Square, Budapest, Hungary, facing the Palace of Art. It was built by the plans of Albert Schickedanz and Fülöp Herzog in an eclectic-neoclassical style, between 1900 and 1906. </p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [19.0742487,47.5162036]
+    }
+    },
+
+    // {
+    // 'type': 'Feature',
+    // 'properties': {
+    // 'description':
+    // '<strong>Make it Mount Pleasant</strong><br><img class="reframe" src="https://www.si.edu/sites/default/files/styles/press_photo/public/newsdesk/photos/castle-and-nmnh-large.jpg?itok=ETUaYa-7" /><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>',
+    // 'icon': 'museum'
+    // },
+    // 'geometry': {
+    // 'type': 'Point',
+    // 'coordinates': [-50.038659, 38.931567]
+    // }
+    // },
+    
+    ]
+    }}
+    );
+    // Add a layer showing the places.
+    map.addLayer({
+    'id': 'places',
+    'type': 'symbol',
+    'source': 'places',
+    'layout': {
+    'icon-image': '{icon}-15',
+    'icon-allow-overlap': true
+    }
+    });
+     
+    // When a click event occurs on a feature in the places layer, open a popup at the
+    // location of the feature, with description HTML from its properties.
+    map.on('click', 'places', function(e) {
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var description = e.features[0].properties.description;
+    map.flyTo({ center: e.features[0].geometry.coordinates });
+    map.getCanvas().style.cursor = 'pointer';
+     
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+
+ 
+     
+    new mapboxgl.Popup()
+    .setLngLat(coordinates)
+    .setHTML(description)
+    .addTo(map);
+    });
+     
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    map.on('mouseenter', 'places', function() {
+    map.getCanvas().style.cursor = 'pointer';
+    });
+     
+    // Change it back to a pointer when it leaves.
+    map.on('mouseleave', 'places', function() {
+    map.getCanvas().style.cursor = '';
+    });
+    });
+    </script>
+
+
+    
+
+</body>
+
+</html>
+
+<!-- {
+    'type': 'Feature',
+    'properties': {
+    'description':
+    '<strong>Make it Mount Pleasant</strong><p><a href="http://www.mtpleasantdc.com/makeitmtpleasant" target="_blank" title="Opens in a new window">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>',
+    'icon': 'museum'
+    },
+    'geometry': {
+    'type': 'Point',
+    'coordinates': [-77.038659, 38.931567]
+    }
+    }, -->
