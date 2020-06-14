@@ -1,5 +1,5 @@
 # museum-explorer
-find a museum during quarantine and learn something new -4/12
+find a museum during quarantine and learn something new
 
 very basic site to test the usage of mapbox interface
 
